@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { GraphQLModule} from "@nestjs/graphql"
-import { join } from 'path'
+import { GraphQLModule} from "@nestjs/graphql";
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 
 @Module({
@@ -11,7 +12,17 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
       schama는 메모리에 저장된다. */
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }), 
-    RestaurantsModule
+    RestaurantsModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: '',
+      database: 'nuber-eats',
+      synchronize: true,
+      logging: true,
+    })
   ],
   controllers: [],
   providers: [],
