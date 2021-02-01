@@ -1,28 +1,34 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule} from "@nestjs/graphql";
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: process.env.NODE_ENV === "dev" ? ".env.dev" : ".env.test", 
+      ignoreEnvFile: process.env.NODE_ENV === "prod"
+    }),
     GraphQLModule.forRoot({
       // autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       /* autoSchemaFile을 true로 설정하면 schema.gql 파일이 자동생성되지 않고
       schama는 메모리에 저장된다. */
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }), 
-    RestaurantsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '',
-      database: 'nuber-eats',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       synchronize: true,
       logging: true,
-    })
+    }),
+    RestaurantsModule
   ],
   controllers: [],
   providers: [],
