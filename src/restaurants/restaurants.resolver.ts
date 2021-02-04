@@ -2,6 +2,7 @@ import { Resolver, Query, Args, Mutation } from "../../node_modules/@nestjs/grap
 import { Restaurant } from './entities/restaurant.entity';
 import { CreateRestaurantDto } from "./dtos/create-restaurant.dto";
 import { RestaurantService } from './restaurants.service';
+import { UpdateRestaurantDto } from "./dtos/update-restaurant.dto";
 
 @Resolver(of => Restaurant)
 /* Resolver 데코레이터에 of=>Restaurant를 추가해줌으로써
@@ -24,5 +25,18 @@ export class RestaurantsResolver {
             return false;
         }
         return true;
+    }
+
+    @Mutation(returns => Boolean)
+    async updateRestaurant(
+        @Args('input') updateRestaurantDto: UpdateRestaurantDto,
+    ): Promise<boolean> {
+        try {
+            await this.restaurantService.updateRestraunt(updateRestaurantDto);
+            return true;
+        } catch(e) {
+            console.log(e)
+            return false;
+        }
     }
 }
