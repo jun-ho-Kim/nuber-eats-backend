@@ -13,6 +13,6 @@ export class CreateAccountOutput {
     @Field(type => String, {nullable: true} )
     error: string;
 
-    @Field(type => String)
+    @Field(type => Boolean)
     ok: boolean;
 }
