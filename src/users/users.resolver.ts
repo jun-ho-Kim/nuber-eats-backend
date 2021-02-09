@@ -17,13 +17,11 @@ export class UserResolver {
     async createAccount(@Args('input') createAccountInput: CreateAccountInput): 
     Promise<CreateAccountOutput>  {
         try {
-            const error = await this.usersService.createAccount(createAccountInput);
-            if(error) {
+            const {ok, error} = await this.usersService.createAccount(createAccountInput);
                 return {
-                    ok: false,
+                    ok,
                     error
-                };
-            }
+                }
         } catch(error) {
             return {
                 error,
