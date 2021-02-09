@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Mutation } from "../../node_modules/@nestjs/graphql";
+import { Resolver, Query, Args, Mutation } from "@nestjs/graphql";
 import { Restaurant } from './entities/restaurant.entity';
 import { CreateRestaurantDto } from "./dtos/create-restaurant.dto";
 import { RestaurantService } from './restaurants.service';

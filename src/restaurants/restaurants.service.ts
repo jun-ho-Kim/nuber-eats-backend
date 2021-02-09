@@ -1,7 +1,7 @@
-import { Injectable } from "../../node_modules/@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Restaurant } from "./entities/restaurant.entity";
-import { Repository } from "../../node_modules/typeorm";
+import { Repository } from "typeorm";
 import { CreateRestaurantDto } from "./dtos/create-restaurant.dto";
 import { UpdateRestaurantDto } from "./dtos/update-restaurant.dto";
 

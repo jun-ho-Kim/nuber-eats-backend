@@ -1,6 +1,6 @@
 import {ObjectType, Field, InputType} from "@nestjs/graphql"
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
-import { IsBoolean, IsOptional, IsString, Length } from "../../../node_modules/class-validator";
+import { IsBoolean, IsOptional, IsString, Length } from "class-validator";
 
 //entity 파일 안에 class validator에 의해 validate 되고 있다.
 @InputType({isAbstract : true })
