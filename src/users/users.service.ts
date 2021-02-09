@@ -3,6 +3,7 @@ import { User } from "./entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateAccountInput } from "./dtos/create-account.dto";
+import { LoginInput, LoginOutput } from "./dtos/login.dto";
 
 
 @Injectable () 
@@ -25,5 +26,36 @@ export class UserService {
         }
         // check new user
         // create user & hash the passowrd
+    }
+
+    async login({
+        email, 
+        password}
+        : LoginInput): Promise<{ok: boolean, error?: string, token?: string}> {
+        try {
+            const user = await this.users.findOne({email});
+            if(!user) {
+                return {
+                    ok: false,
+                    error: 'User not Found'
+                };
+            }
+            const passwordCorrect = await user.checkPassword(password);
+            if(!passwordCorrect) {
+                return {
+                    ok: false,
+                    error: 'Wrong password'
+                };
+            }
+            return {
+                ok: true,
+                token: 'laaaala'
+            };
+        } catch(error) {
+            return {
+                ok: false,
+                error: 'User not found'
+            };
+        }
     }
 }
