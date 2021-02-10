@@ -2,14 +2,23 @@ import { Injectable } from "@nestjs/common";
 import { User } from "./entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import * as jwt from "jsonwebtoken"
 import { CreateAccountInput } from "./dtos/create-account.dto";
 import { LoginInput, LoginOutput } from "./dtos/login.dto";
+import { ConfigService } from "../../node_modules/@nestjs/config";
+import { JwtService } from "../jwt/jwt.service";
 
 
 @Injectable () 
 export class UserService {
     //type이 Repository이고 repository type은 user entity가 된다.
-    constructor(@InjectRepository(User) private readonly users: Repository<User>) {}
+    constructor(
+        @InjectRepository(User) private readonly users: Repository<User>,
+        private readonly config: ConfigService,
+        private readonly jwtService: JwtService
+    ) {
+        this.jwtService.hello()
+    }
 
     async createAccount({email, password, role
     }: CreateAccountInput): Promise<{ok:boolean, error?:string}> {
@@ -47,9 +56,10 @@ export class UserService {
                     error: 'Wrong password'
                 };
             }
+            const token = jwt.sign({id: user.id}, this.config.get("SECRET_KEY"));
             return {
                 ok: true,
-                token: 'laaaala'
+                token
             };
         } catch(error) {
             return {
