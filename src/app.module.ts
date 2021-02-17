@@ -9,6 +9,7 @@ import { CommonModule } from './common/common.module';
 import { User } from './users/entities/user.entity';
 import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
       /* autoSchemaFile을 true로 설정하면 schema.gql 파일이 자동생성되지 않고
       schama는 메모리에 저장된다. */
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      context: ({req}) => ({user: req['user']}),
     }), 
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -50,6 +52,7 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
     }),
     UsersModule,
     CommonModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
