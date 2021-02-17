@@ -45,6 +45,7 @@ export class UserResolver {
         }
     }
     @Query(returns => User)
+    @UseGuards(AuthGuard)
     me(@Context() context) {
         if(!context.user){
             return false
