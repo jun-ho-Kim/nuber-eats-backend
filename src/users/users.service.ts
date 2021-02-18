@@ -7,6 +7,7 @@ import { CreateAccountInput } from "./dtos/create-account.dto";
 import { LoginInput} from "./dtos/login.dto";
 import { ConfigService } from "../../node_modules/@nestjs/config";
 import { JwtService } from "../jwt/jwt.service";
+import { EditProfileInput } from "./dtos/edit-profile.dto";
 
 
 @Injectable () 
@@ -70,5 +71,9 @@ export class UserService {
     }
     async findById(id: number): Promise<User> {
         return this.users.findOne({id});
+    }
+    async editProfile(userId: number, {email, password}: EditProfileInput) {
+        console.log(userId, {email, password});
+        return this.users.update(userId, {email, password});
     }
 }
