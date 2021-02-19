@@ -51,7 +51,10 @@ export class UserService {
         password}
         : LoginInput): Promise<{ok: boolean, error?: string, token?: string}> {
         try {
-            const user = await this.users.findOne({email});
+            const user = await this.users.findOne(
+                {email},
+                {select: ['password']});
+            console.log("login user", user, "user.id");
             if(!user) {
                 return {
                     ok: false,
@@ -96,13 +99,16 @@ export class UserService {
         const verification = await this.verifications.findOne(
             {code},
             {relations: ['user']})
-        console.log(
-            "verification", verification, 
-            "verification.user", verification.user);
-        if(verification) {
-            verification.user.verified = true;
-            this.users.save(verification.user);
+        try {
+            if(verification) {
+                verification.user.verified = true;
+                this.users.save(verification.user);
+                return true;
+            }
+            throw new Error()
+        } catch(e) {
+            console.log(e);
+            return false;
         }
-        return false;
     } 
 }
