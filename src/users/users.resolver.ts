@@ -8,6 +8,7 @@ import { AuthGuard } from "../auth/auth.guard";
 import { AuthUser } from "../auth/auth-user.decorator";
 import { UserProfileInput, UserProfileOutput } from "./dtos/user-profile.dto";
 import { EditProfileInput, EditProfileOutput } from "./dtos/edit-profile.dto";
+import { VerifyEmailOutput, VerifyEmailInput } from "./dtos/verify-email.dto";
 
 
 
@@ -95,4 +96,9 @@ export class UserResolver {
             }
         }
     }
+    @Mutation(returns => VerifyEmailOutput)
+    VerifyEmail(@Args('input') {code}: VerifyEmailInput) {
+        this.usersService.verifyEmail(code);
+    }
+
 }

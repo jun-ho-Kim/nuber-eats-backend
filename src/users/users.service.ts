@@ -9,6 +9,7 @@ import { ConfigService } from "../../node_modules/@nestjs/config";
 import { JwtService } from "../jwt/jwt.service";
 import { EditProfileInput } from "./dtos/edit-profile.dto";
 import { Verification } from "./entities/verification.entity";
+import { VerifyEmailInput } from "./dtos/verify-email.dto";
 
 
 @Injectable () 
@@ -91,4 +92,17 @@ export class UserService {
         }
         return this.users.save(user);
     }
+    async verifyEmail(code: string): Promise<boolean> {
+        const verification = await this.verifications.findOne(
+            {code},
+            {relations: ['user']})
+        console.log(
+            "verification", verification, 
+            "verification.user", verification.user);
+        if(verification) {
+            verification.user.verified = true;
+            this.users.save(verification.user);
+        }
+        return false;
+    } 
 }
