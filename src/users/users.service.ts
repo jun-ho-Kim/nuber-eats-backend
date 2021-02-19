@@ -8,6 +8,7 @@ import { LoginInput} from "./dtos/login.dto";
 import { ConfigService } from "../../node_modules/@nestjs/config";
 import { JwtService } from "../jwt/jwt.service";
 import { EditProfileInput } from "./dtos/edit-profile.dto";
+import { Verification } from "./entities/verification.entity";
 
 
 @Injectable () 
@@ -15,8 +16,9 @@ export class UserService {
     //type이 Repository이고 repository type은 user entity가 된다.
     constructor(
         @InjectRepository(User) private readonly users: Repository<User>,
-        private readonly config: ConfigService,
-        private readonly jwtService: JwtService
+        @InjectRepository(Verification) private readonly verifications: Repository<Verification>,
+        private readonly jwtService: JwtService,
+        
     ) {
         // this.jwtService.hello()
     }
@@ -29,7 +31,12 @@ export class UserService {
                 //make error
                 return {ok: false, error: 'There is a user with that email already'};
             }
-            await this.users.save(this.users.create({email, password, role}));
+            const user = await this.users.save(this.users.create({email, password, role}));
+            await this.verifications.save(
+                this.verifications.create({
+                    user
+                }),
+            )
             return {ok: true};
         } catch (e) {
             return {ok: false, error: 'Couldn`t create account'};
@@ -75,7 +82,9 @@ export class UserService {
     async editProfile(userId: number, {email, password}: EditProfileInput) {
         const user = await this.users.findOne(userId);
         if(email) {
-           user.email = email 
+           user.email = email;
+           user.verified = false;
+           await this.verifications.save(this.verifications.create({user}));
         }
         if(password) {
             user.password = password
