@@ -30,7 +30,7 @@ import { MailModule } from './mail/mail.module';
           DB_NAME: Joi.string().required(),
           PRIVATE_KEY: Joi.string().required(),
           MAILGUN_API_KEY: Joi.string().required(),
-          MAILGUN_DOAMIN_NAME: Joi.string().required(),
+          MAILGUN_DOMAIN_NAME: Joi.string().required(),
           MAILGUN_FROM_EMAIL: Joi.string().required(),
       }),
     }),
@@ -57,7 +57,7 @@ import { MailModule } from './mail/mail.module';
     }),
     MailModule.forRoot({
       apiKey: process.env.MAILGUN_API_KEY,
-      domain: process.env.MAILGUN_DOAMIN_NAME,
+      domain: process.env.MAILGUN_DOMAIN_NAME,
       fromEmail: process.env.MAILGUN_FROM_EMAIL,
     }),
     UsersModule,

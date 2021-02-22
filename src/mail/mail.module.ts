@@ -1,6 +1,7 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { MailModuleOptions } from './mail.interface';
 import { CONFIG_OPTIONS } from '../common/common.constants';
+import { MailService } from './mail.service';
 
 @Module({})
 export class MailModule {
@@ -12,8 +13,9 @@ export class MailModule {
                     provide: CONFIG_OPTIONS,
                     useValue: options,
                 },
+                MailService,
             ],
-            exports: [],
+            exports: [MailService],
         };
     }
 }
