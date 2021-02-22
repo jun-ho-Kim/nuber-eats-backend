@@ -10,15 +10,17 @@ export class MailService {
     constructor(
         @Inject(CONFIG_OPTIONS) private readonly options: MailModuleOptions
     ) {
-        this.sendMail('testing', 'test');
+        this.sendMail('testing', 'verify-email');
     }
 
-    private async sendMail(subject: string, content: string) {
+    private async sendMail(subject: string, template: string) {
         const form = new FormData();
         form.append('from', `happyDelivery@happyDelivery.co.kr`);
         form.append('to', `wnsgh5049@naver.com`);
         form.append('subject', subject)
-        form.append('text', content);
+        form.append('template', template);
+        form.append('v:code', 'assss');
+        form.append('v:username', 'junho-Kim');
         const response = await got(
             `https://api.mailgun.net/v3/${this.options.domain}/messages`,
             {
