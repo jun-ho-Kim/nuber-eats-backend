@@ -48,7 +48,7 @@ export class UserService {
     }
 
     async login({
-        email, 
+        email,
         password}
         : LoginInput): Promise<LoginOutput> {
         try {
