@@ -1,11 +1,12 @@
 import {ObjectType, Field, InputType} from "@nestjs/graphql"
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { IsBoolean, IsOptional, IsString, Length } from "class-validator";
+import { Entity, Column, ManyToOne } from "typeorm";
+import { IsString, Length } from "class-validator";
 import { CoreEntity } from "../../common/entities/core.entity";
 import { Category } from "./category.entity";
+import { User } from "../../users/entities/user.entity";
 
 //entity 파일 안에 class validator에 의해 validate 되고 있다.
-@InputType({isAbstract : true })
+@InputType("RestaurantInputType", {isAbstract : true })
 @ObjectType() /* <- GraphQL를 위한 것  */
 @Entity() /* <- TypeORM를 위한 것  */
 export class Restaurant extends CoreEntity {
@@ -25,15 +26,18 @@ export class Restaurant extends CoreEntity {
     @IsString()
     address: string;
 
-    @Field(type => Category)
+    @Field(type => Category, {nullable: true})
     @ManyToOne(
         type => Category,
-        category => category.restaurant
+        category => category.restaurants,
+        { nullable: true, onDelete: 'SET NULL' },
     )
     category: Category;
 
-    @Field(type => String)
-    @Column()
-    @IsString()
-    ownersName: string;
+    @Field(type => User)
+    @ManyToOne(
+        type => User,
+        user => user.restaurants
+    )
+    owner: User;
 }
