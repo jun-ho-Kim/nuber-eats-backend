@@ -40,7 +40,7 @@ type User {
 }
 
 enum UserRole {
-  client
+  Client
   Owner
   Delivery
 }

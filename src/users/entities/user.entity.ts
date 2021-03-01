@@ -6,10 +6,10 @@ import { InternalServerErrorException } from "@nestjs/common";
 import { IsEmail, IsEnum, IsString, IsBoolean } from "class-validator";
 import { Restaurant } from "../../restaurants/entities/restaurant.entity";
 
-enum UserRole {
-    client,
-    Owner,
-    Delivery,
+export enum UserRole {
+    Client = 'Client',
+    Owner = 'Owner',
+    Delivery = 'Delivery',
 }
 //graphql에서 온 코드 
 registerEnumType(UserRole, {name: 'UserRole'})
