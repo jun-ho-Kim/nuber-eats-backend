@@ -6,6 +6,7 @@ import { CreateRestaurantInput, CreateRestaurantOutput } from "./dtos/create-res
 import { User } from "../users/entities/user.entity";
 import { Category } from "./entities/category.entity";
 import { EditRestaurantInput, EditRestaurantOutput } from "./dtos/edit-restaurant.dto";
+import { CategoryRepository } from "./repository/category.repository";
 
 
 @Injectable()
@@ -14,20 +15,20 @@ export class RestaurantService {
         @InjectRepository(Restaurant)
         private readonly restaurants: Repository<Restaurant>,
         @InjectRepository(Category)
-        private readonly categories: Repository<Category>
+        private readonly categories: CategoryRepository
     ) {}
 
-    async getOrCreateCategory(name: string): Promise<Category> {
-        const categoryName = name.trim().toLowerCase();
-        const categorySlug = categoryName.replace(/ /g, '-');
-        let category = await this.categories.findOne({slug: categorySlug});
-        if(!category) {
-            category = await this.categories.save(
-                this.categories.create({slug: categorySlug, name: categoryName})
-            );
-        }
-        return category;
-    }
+    // async getOrCreate(name: string): Promise<Category> {
+    //     const categoryName = name.trim().toLowerCase();
+    //     const categorySlug = categoryName.replace(/ /g, '-');
+    //     let category = await this.categories.findOne({slug: categorySlug});
+    //     if(!category) {
+    //         category = await this.categories.save(
+    //             this.categories.create({slug: categorySlug, name: categoryName})
+    //         );
+    //     }
+    //     return category;
+    // }
 
     async createRestaurant(
         owner: User,
@@ -36,7 +37,7 @@ export class RestaurantService {
         try {
             const newRestaurant = this.restaurants.create(createRestaurantInput);
             newRestaurant.owner = owner;
-            const category = await this.getOrCreateCategory(
+            const category = await this.categories.getOrCreate(
                 createRestaurantInput.categoryName,
               );
             newRestaurant.category = category;
@@ -57,7 +58,7 @@ export class RestaurantService {
     ): Promise<EditRestaurantOutput> {
         try {
             const restaurant = await this.restaurants.findOne(
-                editRestaurantInput.restraurantId
+                editRestaurantInput.restaurantId
             );
             if(!restaurant) {
                 return {
@@ -70,16 +71,33 @@ export class RestaurantService {
                     ok: false,
                     error: 'You can`t edit a Restaurant that you don`t own',
                 };
+            };
+            let category: Category = null;
+            if(editRestaurantInput.categoryName) {
+                category = await this.categories.getOrCreate(
+                    editRestaurantInput.categoryName
+                );
             }
+            await this.restaurants.save([
+                {
+                    // id: editRestaurantInput.restraurantId,        ])
+                    id: editRestaurantInput.restaurantId,
+                    ...editRestaurantInput,
+                    ...(category && {category})
+                },
+            ]);
             return {
                 ok: true,
-                error: null,
-            }
+            }            
+            // return {
+            //     ok: true,
+            //     error: null,
+            // }
         } catch {
             return {
                 ok: false,
                 error: 'Could not edit Restaurant',
             }
         };
-    };
+    }
 }

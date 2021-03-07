@@ -128,5 +128,5 @@ input EditRestaurantInput {
   coverImg: String
   address: String
   categoryName: String
-  restraurantId: Float!
+  restaurantId: Float!
 }
