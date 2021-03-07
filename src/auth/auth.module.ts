@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '../../node_modules/@nestjs/core';
 import { AuthGuard } from './auth.guard';
+import { UsersModule } from '../users/users.module';
 
 @Module({
+    imports: [UsersModule],
     providers: [
         {
             provide: APP_GUARD,

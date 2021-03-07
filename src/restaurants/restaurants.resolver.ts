@@ -14,7 +14,7 @@ import { EditRestaurantOutput, EditRestaurantInput } from "./dtos/edit-restauran
 export class RestaurantsResolver {
     constructor(private readonly restaurantService: RestaurantService) {}
     @Mutation(returns => CreateRestaurantOutput)
-    @Role(['Owner'])
+    @Role(["Owner"])
     async createRestaurant(
         @AuthUser() authUser: User,
         @Args('input') createRestaurantInput: CreateRestaurantInput,

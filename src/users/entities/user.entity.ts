@@ -43,7 +43,7 @@ export class User extends CoreEntity {
         type => Restaurant,
         restaurant => restaurant.owner,
     )
-    restaurants: Restaurant[]
+    restaurants: Restaurant[];
 
 
     @BeforeInsert()
