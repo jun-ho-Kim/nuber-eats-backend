@@ -1,9 +1,10 @@
 import {ObjectType, Field, InputType} from "@nestjs/graphql"
-import { Entity, Column, ManyToOne, RelationId } from "typeorm";
+import { Entity, Column, ManyToOne, RelationId, OneToMany } from "typeorm";
 import { IsString, Length } from "class-validator";
 import { CoreEntity } from "../../common/entities/core.entity";
 import { Category } from "./category.entity";
 import { User } from "../../users/entities/user.entity";
+import { Dish } from "./dish.entity";
 
 //entity 파일 안에 class validator에 의해 validate 되고 있다.
 @InputType("RestaurantInputType", {isAbstract : true })
@@ -44,4 +45,10 @@ export class Restaurant extends CoreEntity {
 
     @RelationId((restaurant: Restaurant) => restaurant.owner)
     ownerId: number;
-}
+
+    @OneToMany(
+        type => Dish,
+        dish => dish.restaurant,
+    )
+    menu: Dish[];
+};
