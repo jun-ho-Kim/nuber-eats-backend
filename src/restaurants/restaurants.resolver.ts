@@ -9,6 +9,8 @@ import { Role } from "../auth/role.decorator";
 import { EditRestaurantOutput, EditRestaurantInput } from "./dtos/edit-restaurant.dto";
 import { Dish } from "./entities/dish.entity";
 import { CreateDishOutput, CreateDishInput } from "./dtos/create-dish.dto";
+import { EditDishOutput, EditDishInput } from "./dtos/edit-dish.dto";
+import { DeleteDishOutput, DeleteDishInput } from "./dtos/delete-dish.dto";
 
 @Resolver(of => Restaurant)
 /* Resolver 데코레이터에 of=>Restaurant를 추가해줌으로써
@@ -49,4 +51,21 @@ export class DishResolver {
         return this.restaurantService.createDish(owner, createDishInput);
     }
 
+    @Mutation(type => EditDishOutput)
+    @Role(['Owner'])
+    editDish(
+        @AuthUser() owner: User,
+        @Args('input') editDishInput: EditDishInput
+    ): Promise<EditDishOutput> {
+        return this.restaurantService.editDish(owner, editDishInput);
+    };
+
+    @Mutation(type => DeleteDishOutput)
+    @Role(['Owner'])
+    deleteDish(
+        @AuthUser() owner: User,
+        @Args('input') deleteDishInput: DeleteDishInput
+    ): Promise<DeleteDishOutput> {
+        return this.restaurantService.deleteDish(owner, deleteDishInput);
+    }
 }
