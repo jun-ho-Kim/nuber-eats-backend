@@ -7,6 +7,8 @@ import { User, UserRole } from "../users/entities/user.entity";
 import { SetMetadata } from "../../node_modules/@nestjs/common";
 import { Role } from "../auth/role.decorator";
 import { EditRestaurantOutput, EditRestaurantInput } from "./dtos/edit-restaurant.dto";
+import { Dish } from "./entities/dish.entity";
+import { CreateDishOutput, CreateDishInput } from "./dtos/create-dish.dto";
 
 @Resolver(of => Restaurant)
 /* Resolver 데코레이터에 of=>Restaurant를 추가해줌으로써
@@ -32,4 +34,19 @@ export class RestaurantsResolver {
     ): Promise<EditRestaurantOutput> {
         return {ok:true};
     }
+}
+
+@Resolver(of => Dish)
+export class DishResolver {
+    constructor(private readonly restaurantService: RestaurantService) {}
+
+    @Mutation(type => CreateDishOutput)
+    @Role(['Owner'])
+    createDish(
+        @AuthUser() owner: User,
+        @Args('input') createDishInput: CreateDishInput
+    ): Promise<CreateDishOutput> {
+        return this.restaurantService.createDish(owner, createDishInput);
+    }
+
 }

@@ -7,6 +7,8 @@ import { User } from "../users/entities/user.entity";
 import { Category } from "./entities/category.entity";
 import { EditRestaurantInput, EditRestaurantOutput } from "./dtos/edit-restaurant.dto";
 import { CategoryRepository } from "./repository/category.repository";
+import { CreateDishInput, CreateDishOutput } from "./dtos/create-dish.dto";
+import { Dish } from "./entities/dish.entity";
 
 
 @Injectable()
@@ -15,7 +17,9 @@ export class RestaurantService {
         @InjectRepository(Restaurant)
         private readonly restaurants: Repository<Restaurant>,
         @InjectRepository(Category)
-        private readonly categories: CategoryRepository
+        private readonly categories: CategoryRepository,
+        @InjectRepository(Dish)
+        private readonly dishes: Repository<Dish>,
     ) {}
 
     // async getOrCreate(name: string): Promise<Category> {
@@ -35,7 +39,9 @@ export class RestaurantService {
         createRestaurantInput: CreateRestaurantInput,
     ): Promise<CreateRestaurantOutput> {
         try {
-            const newRestaurant = this.restaurants.create(createRestaurantInput);
+            const newRestaurant = this.restaurants.create(
+                createRestaurantInput,
+            );
             newRestaurant.owner = owner;
             const category = await this.categories.getOrCreate(
                 createRestaurantInput.categoryName,
@@ -97,6 +103,42 @@ export class RestaurantService {
             return {
                 ok: false,
                 error: 'Could not edit Restaurant',
+            }
+        };
+    };
+
+    async createDish(
+        owner: User,
+        createDishInput: CreateDishInput
+    ): Promise<CreateDishOutput> {
+        try {
+            const restaurant = await this.restaurants.findOne(
+                createDishInput.restaurantId
+            );
+            if(!restaurant) {
+                return {
+                    ok: false,
+                    error: "Restaurant not Found"
+                };
+            }
+            if(owner.id !== restaurant.ownerId) {
+                return {
+                    ok: false,
+                    error: "You can`t do that",
+                };
+            }
+            await this.dishes.save(
+                this.dishes.create(
+                    {...createDishInput, restaurant}
+                )
+            )
+            return {
+                ok: false,
+            };
+        } catch {
+            return {
+                ok: false,
+                error: "Could not create dish",
             }
         };
     }

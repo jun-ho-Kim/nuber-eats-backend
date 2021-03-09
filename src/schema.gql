@@ -17,6 +17,29 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type DishChoice {
+  name: String!
+  extra: Int
+}
+
+type DishOption {
+  name: String!
+  choices: [DishChoice!]
+  extra: Int
+}
+
+type Dish {
+  id: String!
+  createdAt: DateTime!
+  updateAt: DateTime!
+  name: String!
+  price: Int!
+  photo: String
+  description: String!
+  restaurant: Restaurant!
+  options: [DishOption!]
+}
+
 type Restaurant {
   id: String!
   createdAt: DateTime!
@@ -26,6 +49,7 @@ type Restaurant {
   address: String!
   category: Category
   owner: User!
+  menu: [Dish!]!
 }
 
 type User {
@@ -82,6 +106,11 @@ type EditRestaurantOutput {
   ok: Boolean!
 }
 
+type CreateDishOutput {
+  error: String
+  ok: Boolean!
+}
+
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
@@ -94,6 +123,7 @@ type Mutation {
   VerifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
   createRestaurant(input: CreateRestaurantInput!): CreateRestaurantOutput!
   editRestaurant(input: EditRestaurantInput!): EditRestaurantOutput!
+  createDish(input: CreateDishInput!): CreateDishOutput!
 }
 
 input CreateAccountInput {
@@ -129,4 +159,23 @@ input EditRestaurantInput {
   address: String
   categoryName: String
   restaurantId: Float!
+}
+
+input CreateDishInput {
+  name: String!
+  price: Int!
+  description: String!
+  options: [DishOptionInputType!]
+  restaurantId: Int!
+}
+
+input DishOptionInputType {
+  name: String!
+  choices: [DishChoiceInputType!]
+  extra: Int
+}
+
+input DishChoiceInputType {
+  name: String!
+  extra: Int
 }
