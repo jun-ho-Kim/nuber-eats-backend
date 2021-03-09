@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from "express";
-import { Injectable, NestMiddleware } from "../../node_modules/@nestjs/common";
+import { Injectable, NestMiddleware } from "@nestjs/common";
 import { UserService } from "../users/users.service";
 import { JwtService } from "./jwt.service";
 

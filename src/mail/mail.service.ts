@@ -1,6 +1,6 @@
 import got from "got";
 import * as FormData from 'form-data';
-import { Injectable, Inject } from "../../node_modules/@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 import { CONFIG_OPTIONS } from "../common/common.constants";
 import { MailModuleOptions, EmailVar } from "./mail.interface";
 

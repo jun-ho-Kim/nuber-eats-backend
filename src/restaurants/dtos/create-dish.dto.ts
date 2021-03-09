@@ -1,4 +1,4 @@
-import { Field, PickType, InputType, Int, ObjectType } from "../../../node_modules/@nestjs/graphql";
+import { Field, PickType, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { Dish } from "../entities/dish.entity";
 import { CoreOutput } from "../../common/dtos/output.dto";
 

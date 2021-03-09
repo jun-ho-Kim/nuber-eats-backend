@@ -4,7 +4,7 @@ import { CreateRestaurantInput, CreateRestaurantOutput } from "./dtos/create-res
 import { RestaurantService } from './restaurants.service';
 import { AuthUser } from "../auth/auth-user.decorator";
 import { User, UserRole } from "../users/entities/user.entity";
-import { SetMetadata } from "../../node_modules/@nestjs/common";
+import { SetMetadata } from "@nestjs/common";
 import { Role } from "../auth/role.decorator";
 import { EditRestaurantOutput, EditRestaurantInput } from "./dtos/edit-restaurant.dto";
 import { Dish } from "./entities/dish.entity";

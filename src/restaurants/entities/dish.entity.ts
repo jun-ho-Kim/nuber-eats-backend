@@ -1,6 +1,6 @@
-import { Field, Int, ObjectType, InputType } from "../../../node_modules/@nestjs/graphql";
-import { Column, ManyToOne, RelationId, Entity } from "../../../node_modules/typeorm";
-import { IsString, Length, IsNumber } from "../../../node_modules/class-validator";
+import { Field, Int, ObjectType, InputType } from "@nestjs/graphql";
+import { Column, ManyToOne, RelationId, Entity } from "typeorm";
+import { IsString, Length, IsNumber } from "class-validator";
 import { CoreEntity } from "../../common/entities/core.entity";
 import { Restaurant } from "./restaurant.entity";
 
@@ -9,10 +9,10 @@ import { Restaurant } from "./restaurant.entity";
 class DishChoice {
     @Field(type => String)
     name: string;
+    
     @Field(type => Int, {nullable: true})
     extra?: number;
 }
-
 @InputType("DishOptionInputType", {isAbstract: true})
 @ObjectType()
 class DishOption {

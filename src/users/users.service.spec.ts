@@ -1,11 +1,11 @@
-import { Test } from "../../node_modules/@nestjs/testing";
+import { Test } from "@nestjs/testing";
 import { UserService } from "./users.service";
 import { User } from "./entities/user.entity";
-import { getRepositoryToken } from "../../node_modules/@nestjs/typeorm";
+import { getRepositoryToken } from "@nestjs/typeorm";
 import { Verification } from "./entities/verification.entity";
 import { JwtService } from "../jwt/jwt.service";
 import { MailService } from "../mail/mail.service";
-import { Repository } from "../../node_modules/typeorm";
+import { Repository } from "typeorm";
 
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 

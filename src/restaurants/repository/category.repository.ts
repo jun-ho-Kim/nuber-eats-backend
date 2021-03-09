@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from "../../../node_modules/typeorm";
+import { EntityRepository, Repository } from "typeorm";
 import { Category } from "../entities/category.entity";
 
 

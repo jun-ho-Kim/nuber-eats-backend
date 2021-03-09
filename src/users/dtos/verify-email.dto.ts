@@ -1,4 +1,4 @@
-import { ObjectType, InputType, PickType } from "../../../node_modules/@nestjs/graphql";
+import { ObjectType, InputType, PickType } from "@nestjs/graphql";
 import { CoreOutput } from "../../common/dtos/output.dto";
 import { Verification } from "../entities/verification.entity";
 

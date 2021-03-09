@@ -1,6 +1,6 @@
 import { CanActivate, Injectable, ExecutionContext } from "@nestjs/common";
-import { GqlExecutionContext } from "../../node_modules/@nestjs/graphql";
-import { Reflector } from "../../node_modules/@nestjs/core";
+import { GqlExecutionContext } from "@nestjs/graphql";
+import { Reflector } from "@nestjs/core";
 import { AllowdRoles } from "./role.decorator";
 import { User } from "../users/entities/user.entity";
 
