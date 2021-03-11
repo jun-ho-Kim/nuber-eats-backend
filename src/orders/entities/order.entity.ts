@@ -1,9 +1,9 @@
-import { CoreEntity } from "../common/entities/core.entity";
-import { User } from "../users/entities/user.entity";
-import { Restaurant } from "../restaurants/entities/restaurant.entity";
-import { Dish } from "../restaurants/entities/dish.entity";
-import { Field, InputType, ObjectType, Int, registerEnumType } from "../../node_modules/@nestjs/graphql";
-import { Entity, ManyToOne, JoinTable, ManyToMany, Column } from "../../node_modules/typeorm";
+import { CoreEntity } from "../../common/entities/core.entity";
+import { User } from "../../users/entities/user.entity";
+import { Restaurant } from "../../restaurants/entities/restaurant.entity";
+import { Dish } from "../../restaurants/entities/dish.entity";
+import { Field, InputType, ObjectType, Int, registerEnumType } from "../../../node_modules/@nestjs/graphql";
+import { Entity, ManyToOne, JoinTable, ManyToMany, Column } from "../../../node_modules/typeorm";
 
 
 export enum OrderStatus {
@@ -51,9 +51,9 @@ restaurant: Restaurant;
 @JoinTable()
 dishes: Dish[];
 
-@Column()
-@Field(type => Int)
-total: number;
+@Column({nullable: true})
+@Field(type => Int, {nullable: true})
+total?: number;
 
 
 @Column({ type: 'enum', enum: OrderStatus })
