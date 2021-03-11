@@ -5,6 +5,7 @@ import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql'
 import { InternalServerErrorException } from "@nestjs/common";
 import { IsEmail, IsEnum, IsString, IsBoolean } from "class-validator";
 import { Restaurant } from "../../restaurants/entities/restaurant.entity";
+import { Order } from "../../orders/order.entity";
 
 export enum UserRole {
     Client = 'Client',
@@ -68,4 +69,19 @@ export class User extends CoreEntity {
             throw new InternalServerErrorException();
         }
     }
+
+
+    @Field(type => [Order])
+    @OneToMany(
+        type => Order,
+        order => order.customer
+    )
+    orders: Order[];
+
+    @Field(type => [Order])
+    @OneToMany(
+        type => Order,
+        order => order.driver
+    )
+    rides: Order[];
 }
