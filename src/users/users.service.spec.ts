@@ -10,7 +10,7 @@ import { Repository } from "typeorm";
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 
 describe('UserService', () => {
-    let service: UserService;Verification
+    let service: UserService;
     let usersRepository: MockRepository<User>;
     let verificationRepository: MockRepository<Verification>;
     let mailService: MailService;
@@ -75,7 +75,7 @@ describe('UserService', () => {
             //jest가 중간에 fineOne 함수를 가로채고 반환 값을 속일 것이다.
             usersRepository.findOne.mockResolvedValue({
                 id: '1',
-                email: '',
+                email: '123@naver.com',
             });
             const result = await service.createAccount(createAccountArgs);
             expect(result).toMatchObject({

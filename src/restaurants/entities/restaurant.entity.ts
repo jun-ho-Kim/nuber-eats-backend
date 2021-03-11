@@ -5,7 +5,7 @@ import { CoreEntity } from "../../common/entities/core.entity";
 import { Category } from "./category.entity";
 import { User } from "../../users/entities/user.entity";
 import { Dish } from "./dish.entity";
-import { Order } from "../../orders/order.entity";
+import { Order } from "../../orders/entities/order.entity";
 
 //entity 파일 안에 class validator에 의해 validate 되고 있다.
 @InputType("RestaurantInputType", {isAbstract : true })

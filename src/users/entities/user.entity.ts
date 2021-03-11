@@ -5,7 +5,7 @@ import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql'
 import { InternalServerErrorException } from "@nestjs/common";
 import { IsEmail, IsEnum, IsString, IsBoolean } from "class-validator";
 import { Restaurant } from "../../restaurants/entities/restaurant.entity";
-import { Order } from "../../orders/order.entity";
+import { Order } from "../../orders/entities/order.entity";
 
 export enum UserRole {
     Client = 'Client',
