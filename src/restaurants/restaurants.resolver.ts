@@ -43,7 +43,7 @@ export class DishResolver {
     constructor(private readonly restaurantService: RestaurantService) {}
 
     @Mutation(type => CreateDishOutput)
-    @Role(['Owner'])
+    // @Role(['Owner'])
     createDish(
         @AuthUser() owner: User,
         @Args('input') createDishInput: CreateDishInput
@@ -52,7 +52,7 @@ export class DishResolver {
     }
 
     @Mutation(type => EditDishOutput)
-    @Role(['Owner'])
+    // @Role(['Owner'])
     editDish(
         @AuthUser() owner: User,
         @Args('input') editDishInput: EditDishInput

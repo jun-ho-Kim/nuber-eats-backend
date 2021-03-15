@@ -26,7 +26,7 @@ export class OrderItem extends CoreEntity {
         type => Dish,
         { nullable: true, onDelete: 'CASCADE'}
     )
-    dish: Dish[];
+    dish: Dish;
 
     @Field(type => [OrderItemOption], {nullable: true})
     @Column({ type: 'json', nullable: true })

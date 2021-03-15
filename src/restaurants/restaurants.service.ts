@@ -123,12 +123,13 @@ export class RestaurantService {
                     error: "Restaurant not Found"
                 };
             }
-            if(owner.id !== restaurant.ownerId) {
-                return {
-                    ok: false,
-                    error: "You can`t do that",
-                };
-            }
+            // if(owner.id !== restaurant.ownerId) {
+            //     console.log(owner.id, restaurant.ownerId)
+            //     return {
+            //         ok: false,
+            //         error: "You can`t do that",
+            //     };
+            // }
             await this.dishes.save(
                 this.dishes.create(
                     {...createDishInput, restaurant}
@@ -137,7 +138,8 @@ export class RestaurantService {
             return {
                 ok: false,
             };
-        } catch {
+        } catch(error) {
+            console.log(error)
             return {
                 ok: false,
                 error: "Could not create dish",

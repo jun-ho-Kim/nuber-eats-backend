@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type Category {
-  id: String!
+  id: Float!
   createdAt: DateTime!
   updateAt: DateTime!
   name: String!
@@ -29,7 +29,7 @@ type DishOption {
 }
 
 type Dish {
-  id: String!
+  id: Float!
   createdAt: DateTime!
   updateAt: DateTime!
   name: String!
@@ -46,7 +46,7 @@ type OrderItemOption {
 }
 
 type OrderItem {
-  id: String!
+  id: Float!
   createdAt: DateTime!
   updateAt: DateTime!
   dish: Dish!
@@ -54,7 +54,7 @@ type OrderItem {
 }
 
 type Order {
-  id: String!
+  id: Float!
   createdAt: DateTime!
   updateAt: DateTime!
   customer: User
@@ -73,7 +73,7 @@ enum OrderStatus {
 }
 
 type Restaurant {
-  id: String!
+  id: Float!
   createdAt: DateTime!
   updateAt: DateTime!
   name: String!
@@ -86,7 +86,7 @@ type Restaurant {
 }
 
 type User {
-  id: String!
+  id: Float!
   createdAt: DateTime!
   updateAt: DateTime!
   email: String!
