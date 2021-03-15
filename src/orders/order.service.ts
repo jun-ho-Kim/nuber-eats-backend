@@ -5,6 +5,8 @@ import { Repository } from "../../node_modules/typeorm";
 import { User } from "../users/entities/user.entity";
 import { CreateOrderInput, CreateOrderOutput } from "./dtos/create-order.dto";
 import { Restaurant } from "../restaurants/entities/restaurant.entity";
+import { Dish } from "../restaurants/entities/dish.entity";
+import { OrderItem } from "./entities/order-items.entity";
 
 @Injectable()
 export class OrderService {
@@ -12,7 +14,11 @@ export class OrderService {
         @InjectRepository(Order)
         private readonly orders: Repository<Order>,
         @InjectRepository(Restaurant)
-        private readonly restaurants: Repository<Restaurant>
+        private readonly restaurants: Repository<Restaurant>,
+        @InjectRepository(Dish)
+        private readonly dishes: Repository<Dish>,
+        @InjectRepository(OrderItem)
+        private readonly orderItems: Repository<OrderItem>,
     ) {}
     async createOrder(
         customer: User,
@@ -25,12 +31,23 @@ export class OrderService {
                 error: "Restaurant not found",
             };
         };
-        const order = await this.orders.save(
-            this.orders.create({
-                customer,
-                restaurant,
-            }),
-        );
-        console.log(order);
+        items.forEach(async item => {
+            const dish = await this.dishes.findOne(item.dishId);
+            if(!dish) {
+                //abort this whole thing
+            }
+            await this.orderItems.save(
+                this.orderItems.create({
+                    dish,
+                    options: item.options,
+                }),
+            )
+        })
+        // const order = await this.orders.save(
+        //     this.orders.create({
+        //         customer,
+        //         restaurant,
+        //     }),
+        // );
     }
 }

@@ -43,7 +43,6 @@ type Dish {
 type OrderItemOption {
   name: String!
   choice: String
-  extra: Int
 }
 
 type OrderItem {
@@ -259,5 +258,4 @@ input CreateOrderItemInput {
 input OrderItemOptionInputType {
   name: String!
   choice: String
-  extra: Int
 }

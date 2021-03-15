@@ -1,4 +1,4 @@
-import { Dish, DishOption } from "../../restaurants/entities/dish.entity";
+import { Dish } from "../../restaurants/entities/dish.entity";
 import { Entity, ManyToOne, Column } from "../../../node_modules/typeorm";
 import { Field, ObjectType, InputType, Int } from "../../../node_modules/@nestjs/graphql";
 import { CoreEntity } from "../../common/entities/core.entity";
@@ -6,14 +6,14 @@ import { CoreEntity } from "../../common/entities/core.entity";
 @InputType('OrderItemOptionInputType', { isAbstract: true })
 @ObjectType()
 export class OrderItemOption {
+ /* name은 frontend에서 얻어올 것이다. react와 GraphQL을 이용해서
+    여기 있는 이름을 가진 request를 날릴 것이다. 
+    그러면 back-end에서는 이것의 extra가 얼마인지 찾아볼 것이다. */
     @Field(type => String)
     name: string
 
     @Field(type => String, { nullable: true})
     choice: string;
-
-    @Field(type => Int, { nullable: true })
-    extra?: number;
 }
 
 
