@@ -161,9 +161,20 @@ type CreateOrderOutput {
   ok: Boolean!
 }
 
+type GetOrdersOutput {
+  error: String
+  ok: Boolean!
+  orders: [Order!]
+}
+
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
+  getOrders(input: GetOrdersInput!): GetOrdersOutput!
+}
+
+input GetOrdersInput {
+  status: OrderStatus
 }
 
 type Mutation {

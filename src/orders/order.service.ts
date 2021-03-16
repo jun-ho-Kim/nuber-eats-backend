@@ -2,11 +2,12 @@ import { Injectable } from "../../node_modules/@nestjs/common";
 import { InjectRepository } from "../../node_modules/@nestjs/typeorm";
 import { Order } from "./entities/order.entity";
 import { Repository } from "../../node_modules/typeorm";
-import { User } from "../users/entities/user.entity";
+import { User, UserRole } from "../users/entities/user.entity";
 import { CreateOrderInput, CreateOrderOutput } from "./dtos/create-order.dto";
 import { Restaurant } from "../restaurants/entities/restaurant.entity";
 import { Dish } from "../restaurants/entities/dish.entity";
 import { OrderItem } from "./entities/order-items.entity";
+import { GetOrdersInput, GetOrdersOutput } from "./dtos/get-orders.dto";
 
 @Injectable()
 export class OrderService {
@@ -85,11 +86,60 @@ export class OrderService {
             return {
                 ok: true,
             };
-        } catch {
+        } catch(error) {
+            console.log(error);
             return {
                 ok: false,
                 error: 'Could not create order',
             };
         }
     }
+
+    async getOrders(
+        user: User,
+        { status }: GetOrdersInput
+    ): Promise<GetOrdersOutput> {
+        try {
+            let orders: Order[];
+            if(user.role === UserRole.Client) {
+                orders = await this.orders.find({
+                    where: {
+                        customer: user,
+                        ...(status && {status}),
+                    }
+                })
+            } else if(user.role === UserRole.Delivery) {
+               orders = await this.orders.find({
+                    where: {
+                        driver: user,
+                        ...(status && {status}),
+                    }
+                })
+            } else if(user.role === UserRole.Owner) {
+                const restaurants = await this.restaurants.find({
+                    where: {
+                        owner: user,
+                    },
+                    relations: ['orders'],
+                });
+                orders = restaurants.map(restaurant => restaurant.orders).flat(1);
+                if(status) {
+                    orders = orders.filter(order => order.status === status);
+                }
+            
+            }
+            return {
+                ok: true,
+                orders,   
+            };
+        } catch {
+            return {
+                ok: false,
+                error: 'Could not get orders',
+            }
+        }
+    }
+
+
+
 }

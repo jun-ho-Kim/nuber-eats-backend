@@ -1,7 +1,6 @@
 import { CoreEntity } from "../../common/entities/core.entity";
 import { User } from "../../users/entities/user.entity";
 import { Restaurant } from "../../restaurants/entities/restaurant.entity";
-import { Dish } from "../../restaurants/entities/dish.entity";
 import { Field, InputType, ObjectType, Int, registerEnumType } from "../../../node_modules/@nestjs/graphql";
 import { Entity, ManyToOne, JoinTable, ManyToMany, Column } from "../../../node_modules/typeorm";
 import { OrderItem } from "./order-items.entity";
