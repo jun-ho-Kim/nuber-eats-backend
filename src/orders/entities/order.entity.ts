@@ -10,6 +10,7 @@ import { IsNumber, IsEnum } from "../../../node_modules/class-validator";
 export enum OrderStatus {
     Pending = 'Pending',
     Cooking = 'Cooking',
+    Cooked = 'Cooked',
     PickUp = 'PickUp',
     Deliverd = 'Deliverd',
 }
