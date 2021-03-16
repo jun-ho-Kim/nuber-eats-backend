@@ -2,7 +2,7 @@ import { CoreEntity } from "../../common/entities/core.entity";
 import { User } from "../../users/entities/user.entity";
 import { Restaurant } from "../../restaurants/entities/restaurant.entity";
 import { Field, InputType, ObjectType, Int, registerEnumType } from "../../../node_modules/@nestjs/graphql";
-import { Entity, ManyToOne, JoinTable, ManyToMany, Column } from "../../../node_modules/typeorm";
+import { Entity, ManyToOne, JoinTable, ManyToMany, Column, RelationId } from "../../../node_modules/typeorm";
 import { OrderItem } from "./order-items.entity";
 import { IsNumber, IsEnum } from "../../../node_modules/class-validator";
 
@@ -29,6 +29,9 @@ export class Order extends CoreEntity {
 )
 customer: User;
 
+@RelationId((order: Order) => order.customer)
+customerId: number;
+
 @Field(type => User, {nullable: true})
 @ManyToOne(
     type => User,
@@ -36,6 +39,9 @@ customer: User;
     { onDelete: 'SET NULL', nullable: true }
 )
 driver?: User;
+
+@RelationId((order: Order) => order.driver)
+driverId: number;
 
 @Field(type => Restaurant, {nullable: true})
 @ManyToOne(
@@ -63,3 +69,4 @@ total?: number;
 @IsEnum(OrderStatus)
 status: OrderStatus;
 }
+
