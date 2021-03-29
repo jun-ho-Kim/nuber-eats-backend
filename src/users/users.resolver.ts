@@ -28,10 +28,11 @@ export class UserResolver {
         return this.usersService.login(loginInput);
     }
 
-    @UseGuards(AuthGuard)
+    /* @UseGuards(AuthGuard) */
     @Query(returns => User)
+    
     me(@AuthUser() authUser: User) {
-        return authUser
+        return authUser;
     }
 
     @Query(returns => UserProfileOutput)
