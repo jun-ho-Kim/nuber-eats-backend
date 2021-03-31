@@ -102,10 +102,13 @@ export class UserService {
     async editProfile(userId: number, {email, password}: EditProfileInput
     ): Promise<EditProfileOutput> {
         try {
+            console.log("editProfile(userId:", userId)
             const user = await this.users.findOne(userId);
+            console.log("editProfile(user:", user);
             if(email) {
                user.email = email;
                user.verified = false;
+               await this.verifications.delete({user: {id: user.id}})
                const verification = await this.verifications.save(this.verifications.create({user}));
                 this.mailService.sendVerificationEmail(user.email, verification.code);
             }
@@ -134,7 +137,7 @@ export class UserService {
                 await this.verifications.delete(verification.id);
             }
             return {ok: true};
-            return { ok: false, error: 'Verification not found.' };
+            
         } catch(error) {
             return {ok: false, error};
         }

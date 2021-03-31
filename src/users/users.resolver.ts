@@ -36,7 +36,7 @@ export class UserResolver {
     }
 
     @Query(returns => UserProfileOutput)
-    @Role(['Any'])
+    // @Role(['Any'])
     async userProfile(
         @Args() userProfileInput: UserProfileInput
     ): Promise<UserProfileOutput> {
