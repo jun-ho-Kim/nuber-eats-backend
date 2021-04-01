@@ -11,6 +11,7 @@ import { Dish } from "./entities/dish.entity";
 import { CreateDishOutput, CreateDishInput } from "./dtos/create-dish.dto";
 import { EditDishOutput, EditDishInput } from "./dtos/edit-dish.dto";
 import { DeleteDishOutput, DeleteDishInput } from "./dtos/delete-dish.dto";
+import { DeleteRestaurantInput, DeleteRestaurantOutput } from "./dtos/delete-restaurant.dto";
 
 @Resolver(of => Restaurant)
 /* Resolver 데코레이터에 of=>Restaurant를 추가해줌으로써
@@ -18,7 +19,7 @@ import { DeleteDishOutput, DeleteDishInput } from "./dtos/delete-dish.dto";
 export class RestaurantsResolver {
     constructor(private readonly restaurantService: RestaurantService) {}
     @Mutation(returns => CreateRestaurantOutput)
-    // @Role(["Owner"])
+    @Role(["Owner"])
     async createRestaurant(
         @AuthUser() authUser: User,
         @Args('input') createRestaurantInput: CreateRestaurantInput,
@@ -31,10 +32,22 @@ export class RestaurantsResolver {
     @Mutation(returns => EditRestaurantOutput)
     @Role(['Owner'])
     async editRestaurant(
-        @AuthUser() authUser: User,
+        @AuthUser() owner: User,
         @Args('input') editRestaurantInput: EditRestaurantInput
     ): Promise<EditRestaurantOutput> {
-        return {ok:true};
+        return this.restaurantService.editRestaurant(owner, editRestaurantInput);
+    }
+
+    @Mutation(returns => DeleteRestaurantOutput)
+    @Role(['Owner'])
+    async deleteRestaurant(
+        @AuthUser() owner: User,
+        @Args('input') deleteRestaurantInput: DeleteRestaurantInput
+    ): Promise<DeleteRestaurantOutput> {
+        return this.restaurantService.deleteRestaurant(
+            owner, 
+            deleteRestaurantInput
+        );
     }
 }
 
@@ -52,7 +65,7 @@ export class DishResolver {
     }
 
     @Mutation(type => EditDishOutput)
-    // @Role(['Owner'])
+    @Role(['Owner'])
     editDish(
         @AuthUser() owner: User,
         @Args('input') editDishInput: EditDishInput
