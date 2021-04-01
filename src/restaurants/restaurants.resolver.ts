@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Mutation } from "@nestjs/graphql";
+import { Resolver, Query, Args, Mutation, ResolveField, Int, Parent } from "@nestjs/graphql";
 import { Restaurant } from './entities/restaurant.entity';
 import { CreateRestaurantInput, CreateRestaurantOutput } from "./dtos/create-restaurant.dto";
 import { RestaurantService } from './restaurants.service';
@@ -12,6 +12,8 @@ import { CreateDishOutput, CreateDishInput } from "./dtos/create-dish.dto";
 import { EditDishOutput, EditDishInput } from "./dtos/edit-dish.dto";
 import { DeleteDishOutput, DeleteDishInput } from "./dtos/delete-dish.dto";
 import { DeleteRestaurantInput, DeleteRestaurantOutput } from "./dtos/delete-restaurant.dto";
+import { Category } from "./entities/category.entity";
+import { AllCategoriesOutput } from "./dtos/all-categories.dto";
 
 @Resolver(of => Restaurant)
 /* Resolver 데코레이터에 of=>Restaurant를 추가해줌으로써
@@ -80,5 +82,21 @@ export class DishResolver {
         @Args('input') deleteDishInput: DeleteDishInput
     ): Promise<DeleteDishOutput> {
         return this.restaurantService.deleteDish(owner, deleteDishInput);
+    }
+}
+
+@Resolver(of => Category)
+export class CategoryResolver {
+    constructor(private readonly restaurantService: RestaurantService) {}
+
+    @ResolveField(type => Int)
+    restaurantCount(@Parent() category: Category): Promise<number> {
+        console.log("category:",  category);
+        return this.restaurantService.countRestaurant(category);
+    }
+
+    @Query(type => AllCategoriesOutput)
+    allCategories(): Promise<AllCategoriesOutput> {
+        return this.restaurantService.allCategories();
     }
 }

@@ -12,6 +12,7 @@ import { Dish } from "./entities/dish.entity";
 import { EditDishInput, EditDishOutput } from "./dtos/edit-dish.dto";
 import { DeleteDishInput, DeleteDishOutput } from "./dtos/delete-dish.dto";
 import { DeleteRestaurantInput, DeleteRestaurantOutput } from "./dtos/delete-restaurant.dto";
+import { AllCategoriesOutput } from "./dtos/all-categories.dto";
 
 
 @Injectable()
@@ -246,5 +247,23 @@ export class RestaurantService {
                 error: "Could not delete dish"
             }
         }
+    }
+
+    async allCategories(): Promise<AllCategoriesOutput> {
+        try {
+            const categories = await this.categories.find();
+            return {
+                ok: true,
+                categories,
+            }
+        } catch {
+            return {
+                ok: false,
+                error: "Could not load categories",
+            }
+        }
+    }
+    countRestaurant(category: Category) {
+        return this.restaurants.count({category});
     }
 }
