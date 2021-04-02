@@ -15,6 +15,8 @@ import { DeleteRestaurantInput, DeleteRestaurantOutput } from "./dtos/delete-res
 import { Category } from "./entities/category.entity";
 import { AllCategoriesOutput } from "./dtos/all-categories.dto";
 import { CategoryInput, CategoryOutput } from "./dtos/category.dto";
+import { RestaurantsInput, RestaurantsOutput } from "./dtos/restaurants.dto";
+import { RestaurantInput, RestaurantOutput } from "./dtos/restaurant.dto";
 
 @Resolver(of => Restaurant)
 /* Resolver 데코레이터에 of=>Restaurant를 추가해줌으로써
@@ -51,6 +53,20 @@ export class RestaurantsResolver {
             owner, 
             deleteRestaurantInput
         );
+    };
+
+    @Query(type => RestaurantsOutput)
+    restaurants(
+        @Args('input') restaurantsInput: RestaurantsInput
+    ): Promise<RestaurantsOutput> {
+        return this.restaurantService.allRestaurants(restaurantsInput);
+    };
+
+    @Query(type => RestaurantOutput)
+    restaurant(
+        @Args('input') restaurantInput: RestaurantInput
+    ): Promise<RestaurantOutput> {
+        return this.restaurantService.findRestaurantById(restaurantInput)
     }
 }
 

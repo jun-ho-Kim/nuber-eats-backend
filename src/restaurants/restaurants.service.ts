@@ -14,6 +14,8 @@ import { DeleteDishInput, DeleteDishOutput } from "./dtos/delete-dish.dto";
 import { DeleteRestaurantInput, DeleteRestaurantOutput } from "./dtos/delete-restaurant.dto";
 import { AllCategoriesOutput } from "./dtos/all-categories.dto";
 import { CategoryInput, CategoryOutput } from "./dtos/category.dto";
+import { RestaurantsInput, RestaurantsOutput } from "./dtos/restaurants.dto";
+import { RestaurantInput, RestaurantOutput } from "./dtos/restaurant.dto";
 
 
 @Injectable()
@@ -289,6 +291,7 @@ export class RestaurantService {
             const totalResult = await this.countRestaurant(category);
             return {
                 ok: true,
+                restaurants,
                 category,
                 totalPages: Math.ceil(totalResult /25),
             }
@@ -297,6 +300,52 @@ export class RestaurantService {
                 ok: false,
                 error: "Could not load category",
             }
+        }
+    };
+
+    async allRestaurants(
+        {page} :RestaurantsInput
+    ): Promise<RestaurantsOutput> {
+        try {
+            const [restaurants, totalResults] = await this.restaurants.findAndCount({
+                take: 25,
+                skip: (page-1) * 25,
+            });
+
+            return {
+                ok: true,
+                results: restaurants,
+                totalPages: Math.ceil(totalResults / 25),
+                totalResults,
+            }
+        } catch {
+            return {
+                ok: false,
+                error: "Could not load Restaurant"
+            }
+        }
+    }
+
+    async findRestaurantById(
+        {restaurantId}: RestaurantInput
+    ): Promise<RestaurantOutput> {
+        try {
+            const restaurant = await this.restaurants.findOne(restaurantId);
+            if(!restaurant) {
+                return {
+                    ok: false,
+                    error: "Restaurant not Found",
+                };
+            }
+            return {
+                ok: true,
+                restaurant,
+            }
+        } catch {
+            return {
+                ok: false,
+                error: "Could not find restaurant",
+            };
         }
     }
 }
