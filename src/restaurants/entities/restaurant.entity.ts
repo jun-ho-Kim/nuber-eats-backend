@@ -32,7 +32,7 @@ export class Restaurant extends CoreEntity {
     @ManyToOne(
         type => Category,
         category => category.restaurants,
-        { nullable: true, onDelete: 'SET NULL' },
+        { nullable: true, onDelete: 'SET NULL', eager: true },
     )
     category: Category;
 
@@ -60,4 +60,12 @@ export class Restaurant extends CoreEntity {
         order => order.restaurant,
     )
     orders: Order[];
+
+    @Field(type => Boolean)
+    @Column({ default: false })
+    isPromoted: boolean;
+
+    @Field(type => Date, { nullable: true})
+    @Column({ nullable: true })
+    promtedUntill: Date
 };

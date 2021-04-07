@@ -17,6 +17,7 @@ import { CategoryInput, CategoryOutput } from "./dtos/category.dto";
 import { RestaurantsInput, RestaurantsOutput } from "./dtos/restaurants.dto";
 import { RestaurantInput, RestaurantOutput } from "./dtos/restaurant.dto";
 import { SearchRestaurantInput, SearchRestaurantOutput } from "./dtos/search-restaurant.dto";
+import { MyRestaurantsOutput } from "./dtos/my-restaurants.dto";
 
 
 @Injectable()
@@ -309,14 +310,14 @@ export class RestaurantService {
     ): Promise<RestaurantsOutput> {
         try {
             const [restaurants, totalResults] = await this.restaurants.findAndCount({
-                take: 25,
-                skip: (page-1) * 25,
+                take: 2,
+                skip: (page-1) * 2,
             });
 
             return {
                 ok: true,
                 results: restaurants,
-                totalPages: Math.ceil(totalResults / 25),
+                totalPages: Math.ceil(totalResults / 2),
                 totalResults,
             }
         } catch {
@@ -341,6 +342,8 @@ export class RestaurantService {
             return {
                 ok: true,
                 restaurant,
+                // totalResults,
+                // totalPages: Math.ceil(totalResults / setPageContetents),
             }
         } catch {
             return {
@@ -357,20 +360,37 @@ export class RestaurantService {
                 where: {
                     name: Raw(name => `${name} Like '%${query}%'`),
                 },
-                skip: (page - 1) * 25,
-                take: 25,
+                skip: (page - 1) * 2,
+                take: 2,
             })
             return {
                 ok: true,
                 restaurants,
                 totalResults,
-                totalPages: Math.ceil(totalResults / 25),
+                totalPages: Math.ceil(totalResults / 2),
             }
         } catch {
             return {
                 ok: false,
                 error: "Could not search restaurants"
             }
+        }
+    }
+
+    async myRestaurants(
+        owner: User,
+    ): Promise<MyRestaurantsOutput> {
+        try {
+            const restaurants = await this.restaurants.find({owner})
+            return {
+                ok: true,
+                restaurants,
+            };
+        } catch {
+            return {
+                ok: false,
+                error: "Could not find restaurants."
+            };
         }
     }
 }

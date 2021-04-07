@@ -18,6 +18,7 @@ import { CategoryInput, CategoryOutput } from "./dtos/category.dto";
 import { RestaurantsInput, RestaurantsOutput } from "./dtos/restaurants.dto";
 import { RestaurantInput, RestaurantOutput } from "./dtos/restaurant.dto";
 import { SearchRestaurantInput, SearchRestaurantOutput } from "./dtos/search-restaurant.dto";
+import { MyRestaurantsOutput } from "./dtos/my-restaurants.dto";
 
 @Resolver(of => Restaurant)
 /* Resolver 데코레이터에 of=>Restaurant를 추가해줌으로써
@@ -75,6 +76,14 @@ export class RestaurantsResolver {
         @Args('input') searchRestaurantInput: SearchRestaurantInput
     ): Promise<SearchRestaurantOutput> {
         return this.restaurantService.searchRestaurantName(searchRestaurantInput);
+    }
+
+    @Query(type => MyRestaurantsOutput)
+    @Role(["Owner"])
+    myRestaurants(
+        @AuthUser() owner: User,
+    ): Promise<MyRestaurantsOutput> {
+        return this.restaurantService.myRestaurants(owner);
     }
 }
 
