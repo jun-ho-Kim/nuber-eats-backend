@@ -45,12 +45,20 @@ import { UploadsModule } from './uploads/uploads.module';
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: true,
+<<<<<<< HEAD
       context: ({ req, connection }) => { 
         const TOKEN_KEY = 'x-jwt';
         return {token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY]
       }
     }
   }),
+=======
+      context: ({ req, connection }) => {
+        const TOKEN_KEY = 'x-jwt';
+        return {token: req? req.headers[TOKEN_KEY]: connection.context[TOKEN_KEY],}
+      },
+    }),
+>>>>>>> 2c9480da23e3cbaec8e36df6c88ca08b4890be44
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,

@@ -40,7 +40,11 @@
     "got": "^11.8.1",
     "graphql": "^15.5.0",
     "graphql-subscriptions": "^1.2.1",
+<<<<<<< HEAD
     "graphql-tools": "^7.0.4",
+=======
+    "graphql-tools": "^7.0.2",
+>>>>>>> 2c9480da23e3cbaec8e36df6c88ca08b4890be44
     "joi": "^17.3.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.5.1",
