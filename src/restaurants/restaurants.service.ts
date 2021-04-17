@@ -18,6 +18,7 @@ import { RestaurantsInput, RestaurantsOutput } from "./dtos/restaurants.dto";
 import { RestaurantInput, RestaurantOutput } from "./dtos/restaurant.dto";
 import { SearchRestaurantInput, SearchRestaurantOutput } from "./dtos/search-restaurant.dto";
 import { MyRestaurantsOutput } from "./dtos/my-restaurants.dto";
+import { MyRestaurantInput, MyRestaurantOutput } from "./dtos/my-restaurant.dto";
 
 
 @Injectable()
@@ -59,6 +60,7 @@ export class RestaurantService {
             await this.restaurants.save(newRestaurant);
             return {
                 ok: true,
+                restaurantId: newRestaurant.id
             };
         } catch {
             return {
@@ -341,7 +343,7 @@ export class RestaurantService {
             }
             return {
                 ok: true,
-                restaurant,
+                // restaurant,
                 // totalResults,
                 // totalPages: Math.ceil(totalResults / setPageContetents),
             }
@@ -391,6 +393,30 @@ export class RestaurantService {
                 ok: false,
                 error: "Could not find restaurants."
             };
+        }
+    }
+
+    async myRestaurant(
+        owner: User,
+        {id}: MyRestaurantInput
+    ): Promise<MyRestaurantOutput> {
+        const restaurant = await this.restaurants.findOne({owner, id})
+        if(!restaurant) {
+            return {
+                ok: false,
+                error: "Restaurant not found",
+            }
+        }
+        try {
+            return {
+                ok: true,
+                restaurant,
+            }
+        } catch {
+            return {
+                ok: false,
+                error: "Could not find restaurants.",
+            }
         }
     }
 }

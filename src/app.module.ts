@@ -43,9 +43,14 @@ import { UploadsModule } from './uploads/uploads.module';
       }),
     }),
     GraphQLModule.forRoot({
+      installSubscriptionHandlers: true,
       autoSchemaFile: true,
-      context: ({ req }) => ({ user: req['user'] }),
-    }), 
+      context: ({ req, connection }) => { 
+        const TOKEN_KEY = 'x-jwt';
+        return {token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY]
+      }
+    }
+  }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -75,11 +80,4 @@ import { UploadsModule } from './uploads/uploads.module';
   controllers: [],
   providers: [],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes({
-      path: '/graphql',
-      method: RequestMethod.POST,
-    })
-  }
-}
+export class AppModule {};
