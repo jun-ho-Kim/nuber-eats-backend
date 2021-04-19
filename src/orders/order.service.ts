@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "../../node_modules/@nestjs/common";
 import { InjectRepository } from "../../node_modules/@nestjs/typeorm";
-import { Order } from "./entities/order.entity";
+import { Order, OrderStatus } from "./entities/order.entity";
 import { Repository } from "../../node_modules/typeorm";
 import { User, UserRole } from "../users/entities/user.entity";
 import { CreateOrderInput, CreateOrderOutput } from "./dtos/create-order.dto";
@@ -10,7 +10,7 @@ import { OrderItem } from "./entities/order-items.entity";
 import { GetOrdersInput, GetOrdersOutput } from "./dtos/get-orders.dto";
 import { GetOrderOutput, GetOrderInput } from "./dtos/get-order.dto";
 import { EditOrderOutput, EditOrderInput } from "./dtos/edit-order.dto";
-import { NEW_PENDING_ORDER, PUB_SUB } from "src/common/common.constants";
+import { NEW_COOKED_ORDER, NEW_PENDING_ORDER, PUB_SUB } from "src/common/common.constants";
 import { PubSub } from "graphql-subscriptions";
 
 @Injectable()
@@ -200,7 +200,7 @@ export class OrderService {
     ): Promise<EditOrderOutput> {
         try {
             const order = await this.orders.findOne(orderId, {
-                relations: ['restaurant'],
+                relations: ['restaurant', 'customer'],
             });
             if(!order) {
                 return {
@@ -234,12 +234,19 @@ export class OrderService {
                     error: "You can`t do that"
                 };
             };
-            await this.orders.save([
-                {
-                    id: orderId,
-                    status,
-                },
-            ]);
+            await this.orders.save({
+                id: orderId,
+                status,
+            });
+            if(user.role === UserRole.Owner) {
+                if(status === OrderStatus.Cooked) {
+                    await this.pubSub.publish(NEW_COOKED_ORDER, {
+                        cookedOrders: { ...order, status}
+                    });
+                    console.log("order", order);
+                }
+            }
+            
             return {
                 ok: true,
             }
