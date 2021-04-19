@@ -176,7 +176,7 @@ export class RestaurantService {
                 )
             )
             return {
-                ok: false,
+                ok: true,
             };
         } catch(error) {
             console.log(error)

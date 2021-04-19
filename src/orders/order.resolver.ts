@@ -9,14 +9,9 @@ import { GetOrdersOutput, GetOrdersInput } from "./dtos/get-orders.dto";
 import { GetOrderOutput, GetOrderInput } from "./dtos/get-order.dto";
 import { EditOrderOutput, EditOrderInput } from "./dtos/edit-order.dto";
 import { PubSub } from "graphql-subscriptions";
-<<<<<<< HEAD
 import { Inject } from "@nestjs/common";
-import { PUB_SUB } from "src/common/common.constants";
+import { NEW_PENDING_ORDER, PUB_SUB } from "src/common/common.constants";
 import { validateOrReject } from "class-validator";
-=======
-
-const pubsub = new PubSub();
->>>>>>> 2c9480da23e3cbaec8e36df6c88ca08b4890be44
 
 @Resolver(of => Order)
 export class OrderResovler {
@@ -26,7 +21,7 @@ export class OrderResovler {
         ) {}
 
     @Mutation(returns => CreateOrderOutput)
-    // @Role(['Client'])
+    @Role(['Client'])
     async createOrder(
         @AuthUser() customer: User,
         @Args('input') createOrderInput: CreateOrderInput
@@ -60,39 +55,17 @@ export class OrderResovler {
         @Args('input') editOrderInput: EditOrderInput
     ): Promise<EditOrderOutput> {
         return this.ordersService.editOrder(user, editOrderInput);
-    }
+    };
 
-    @Mutation(returns => Boolean)
-<<<<<<< HEAD
-    async potatoReady(@Args('potatoId') potatoId: number) {
-        await this.pubSub.publish('hotPotato', {
-            readyPotato: potatoId
-        });
-        return false;
-    }
-
-    @Subscription(returns => String, {
-        filter: ({readyPotato}, {potatoId}) => {
-            return potatoId  !== readyPotato;
-        }
+    @Subscription(returns => Order, {
+        filter: ({pendingOrders: {ownerId}}, _, {user}) => {
+            console.log("ownerId", ownerId, "user.id", user.id);
+            return ownerId === user.id;
+        },
+        resolve: ({pendingOrders: {order}}) => order,
     })
-    readyPotato(
-        @Args('potatoId') potatoId: number ) {
-        return this.pubSub.asyncIterator("hotPotato");
-=======
     @Role(["Any"])
-    potatoReady() {
-        pubsub.publish('hotPotato', {
-            readyPotato: "You potato is ready. love you "
-        });
-        return true;
-    }
-
-    @Subscription(returns => String)
-    @Role(["Any"])
-    readyPotato(@AuthUser() user: User) {
-        console.log("subscribe User:", user);
-        return pubsub.asyncIterator("hotPotato");
->>>>>>> 2c9480da23e3cbaec8e36df6c88ca08b4890be44
+    pendingOrders() {
+        return this.pubSub.asyncIterator(NEW_PENDING_ORDER);
     }
 }
