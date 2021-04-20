@@ -10,7 +10,7 @@ import { OrderItem } from "./entities/order-items.entity";
 import { GetOrdersInput, GetOrdersOutput } from "./dtos/get-orders.dto";
 import { GetOrderOutput, GetOrderInput } from "./dtos/get-order.dto";
 import { EditOrderOutput, EditOrderInput } from "./dtos/edit-order.dto";
-import { NEW_COOKED_ORDER, NEW_PENDING_ORDER, PUB_SUB } from "src/common/common.constants";
+import { NEW_COOKED_ORDER, NEW_ORDER_UPDATE, NEW_PENDING_ORDER, PUB_SUB } from "src/common/common.constants";
 import { PubSub } from "graphql-subscriptions";
 
 @Injectable()
@@ -200,7 +200,7 @@ export class OrderService {
     ): Promise<EditOrderOutput> {
         try {
             const order = await this.orders.findOne(orderId, {
-                relations: ['restaurant', 'customer'],
+                relations: ['restaurant'],
             });
             if(!order) {
                 return {
@@ -238,15 +238,19 @@ export class OrderService {
                 id: orderId,
                 status,
             });
+            const newOrder = {...order, status};
             if(user.role === UserRole.Owner) {
                 if(status === OrderStatus.Cooked) {
                     await this.pubSub.publish(NEW_COOKED_ORDER, {
-                        cookedOrders: { ...order, status}
+                        cookedOrders: newOrder
                     });
                     console.log("order", order);
                 }
-            }
+            };
             
+            await this.pubSub.publish(NEW_ORDER_UPDATE, {
+                orderUpdates : newOrder
+            })
             return {
                 ok: true,
             }
