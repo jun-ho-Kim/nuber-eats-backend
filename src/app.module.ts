@@ -54,10 +54,6 @@ import { UploadsModule } from './uploads/uploads.module';
   }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      ssl: process.env.NODE_ENV === 'production'
-        ? { rejectUnauthorized: false }
-        : null,
-        
       ...(process.env.DATABASE_URL
         ?{url: process.env.DATABASE_URL}
         :{
