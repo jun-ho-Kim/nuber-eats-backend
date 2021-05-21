@@ -38,12 +38,13 @@ import { UploadsModule } from './uploads/uploads.module';
         MAILGUN_API_KEY: Joi.string().required(),
         MAILGUN_DOMAIN_NAME: Joi.string().required(),
         MAILGUN_FROM_EMAIL: Joi.string().required(),
-        AWS_S3_ACCESSKEYID: Joi.string(),
-        AWS_S3_SECRETACCESSKEY: Joi.string(),
+        AWS_S3_ACCESSKEYID: Joi.string().required(),
+        AWS_S3_SECRETACCESSKEY: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
+      ssl: false,
       ...(process.env.DATABASE_URL
         ? { url: process.env.DATABASE_URL }
         : {
