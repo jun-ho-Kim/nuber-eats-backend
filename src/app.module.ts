@@ -38,8 +38,8 @@ import { UploadsModule } from './uploads/uploads.module';
         MAILGUN_API_KEY: Joi.string().required(),
         MAILGUN_DOMAIN_NAME: Joi.string().required(),
         MAILGUN_FROM_EMAIL: Joi.string().required(),
-        AAWS_S3_ACCESSKEYID: Joi.string().required(),
-        AWS_S3_SECRETACCESSKEY: Joi.string().required(),
+        AWS_S3_ACCESSKEYID: Joi.string(),
+        AWS_S3_SECRETACCESSKEY: Joi.string(),
       }),
     }),
     TypeOrmModule.forRoot({
