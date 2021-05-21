@@ -63,8 +63,8 @@ import { UploadsModule } from './uploads/uploads.module';
           password: process.env.DB_PASSWORD,
           database: process.env.DB_NAME,
         }),
-      synchronize: process.env.NODE_ENV !== 'prod',
-      logging: process.env.NODE_ENV !== 'prod',
+      synchronize: process.env.NODE_ENV !== 'production',
+      logging: process.env.NODE_ENV !== 'production',
       entities: [User, Verification, Category, Restaurant, Dish, Order, OrderItem],
     }),
     JwtModule.forRoot({
