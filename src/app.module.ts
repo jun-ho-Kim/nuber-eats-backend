@@ -3,12 +3,10 @@ import * as Joi from 'joi';
 import { GraphQLModule} from "@nestjs/graphql";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
 import { User } from './users/entities/user.entity';
 import { JwtModule } from './jwt/jwt.module';
-import { JwtMiddleware } from './jwt/jwt.middleware';
 import { AuthModule } from './auth/auth.module';
 import { Verification } from './users/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
@@ -36,10 +34,12 @@ import { UploadsModule } from './uploads/uploads.module';
           DB_USERNAME: Joi.string(),
           DB_PASSWORD: Joi.string(),
           DB_NAME: Joi.string(),
-          PRIVATE_KEY: Joi.string().required(),
-          MAILGUN_API_KEY: Joi.string().required(),
-          MAILGUN_DOMAIN_NAME: Joi.string().required(),
-          MAILGUN_FROM_EMAIL: Joi.string().required(),
+          PRIVATE_KEY: Joi.string(),
+          MAILGUN_API_KEY: Joi.string(),
+          MAILGUN_DOMAIN_NAME: Joi.string(),
+          MAILGUN_FROM_EMAIL: Joi.string(),
+          AWS_S3_ACCESSKEYID: Joi.string(),
+          AWS_S3_SECRETACCESSKEY: Joi.string(),
       }),
     }),
     GraphQLModule.forRoot({
@@ -54,10 +54,6 @@ import { UploadsModule } from './uploads/uploads.module';
   }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      ssl: process.env.NODE_ENV === 'production'
-        ? { rejectUnauthorized: false }
-        : null,
-        
       ...(process.env.DATABASE_URL
         ?{url: process.env.DATABASE_URL}
         :{
