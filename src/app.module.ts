@@ -47,8 +47,9 @@ import { UploadsModule } from './uploads/uploads.module';
       autoSchemaFile: true,
       context: ({ req, connection }) => { 
         const TOKEN_KEY = 'x-jwt';
-        return {token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY]
-      }
+        return {
+          token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY]
+        }
     }
   }),
     TypeOrmModule.forRoot({

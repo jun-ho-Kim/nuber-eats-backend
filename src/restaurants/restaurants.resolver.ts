@@ -59,6 +59,7 @@ export class RestaurantsResolver {
     };
 
     @Query(type => RestaurantsOutput)
+    @Role(['Any'])
     restaurants(
         @Args('input') restaurantsInput: RestaurantsInput
     ): Promise<RestaurantsOutput> {
@@ -66,6 +67,7 @@ export class RestaurantsResolver {
     };
 
     @Query(type => RestaurantOutput)
+    @Role(['Any'])
     restaurant(
         @Args('input') restaurantInput: RestaurantInput
     ): Promise<RestaurantOutput> {
@@ -102,7 +104,7 @@ export class DishResolver {
     constructor(private readonly restaurantService: RestaurantService) {}
 
     @Mutation(type => CreateDishOutput)
-    // @Role(['Owner'])
+    @Role(['Owner'])
     createDish(
         @AuthUser() owner: User,
         @Args('input') createDishInput: CreateDishInput

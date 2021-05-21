@@ -28,10 +28,10 @@ export class UserResolver {
         return this.usersService.login(loginInput);
     }
 
-    /* @UseGuards(AuthGuard) */
     @Query(returns => User)
-    
+    @Role(['Any'])
     me(@AuthUser() authUser: User) {
+        console.log("authUser", authUser);
         return authUser;
     }
 

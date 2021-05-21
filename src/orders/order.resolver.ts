@@ -39,19 +39,9 @@ export class OrderResovler {
         @Args('input') getOrdersInput: GetOrdersInput,
     ): Promise<GetOrdersOutput> {
         return this.ordersService.getOrders(user, getOrdersInput);
-    }
-
-    @Query(returns => GetOrderOutput)
-    // @Role(["Any"])
-    async getOrder(
-        @AuthUser() user: User,
-        @Args('input') getOrderInput: GetOrderInput
-    ): Promise<GetOrderOutput> {
-        return this.ordersService.getOrder(user, getOrderInput);
-    }
+    };
 
     @Mutation(returns => EditOrderOutput)
-    // @Role(["Any"])
     @Role(["Owner"])
     async editOrder(
         @AuthUser() user: User,
